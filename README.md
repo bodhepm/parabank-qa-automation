@@ -90,3 +90,33 @@ Scenarios A and B currently use Java, Selenium, and TestNG. Scenario C uses Post
 ## Limitations
 
 ParaBank is a shared public demo environment. Database resets can affect other tests, and tests should not be run concurrently when they modify shared data.
+
+## Running Scenario C with Postman
+
+1. Install Postman.
+2. Download or clone this repository.
+3. Import `postman/ParaBank_Automation.postman_collection.json` into Postman.
+4. Create or select an environment with the `baseUrl` variable set to `https://parabank.parasoft.com/parabank`.
+5. Run the requests in the **Scenario C - API Validation** folder in order, from `00 - Open Registration Page` through `06 - Get Transaction History`.
+6. Check the Postman test results after each request.
+
+The registration request creates a new test user. Later requests use the customer and account IDs captured from earlier responses. The collection uses the shared public ParaBank demo environment, so avoid running database-reset requests unnecessarily.
+
+### TypeScript Transaction Validation
+
+From the project root, install dependencies:
+
+```bash
+npm install
+```
+
+Set `ACCOUNT_ID` to the account created by Scenario C, then run:
+
+**Windows Command Prompt**
+
+```bat
+set ACCOUNT_ID=YOUR_ACCOUNT_ID
+npm run validate:transactions
+```
+
+Replace `YOUR_ACCOUNT_ID` with the actual account ID. The TypeScript validator independently checks the transaction API response; it does not automatically execute the Postman collection.
