@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="ParaBank QA Suite">
+
+    <listeners>
+        <listener class-name="com.immverse.qa.reporter.CustomHtmlReporter"/>
+    </listeners>
+
+    <test name="ParaBank Tests">
+        <classes>
+            <class name="com.immverse.qa.tests.SmokeTest"/>
+            <class name="com.immverse.qa.tests.RegistrationTest"/>
+            <class name="com.immverse.qa.tests.OpenAccountTest"/>
+            <class name="com.immverse.qa.tests.TransferFundsTest"/>
+        </classes>
+    </test>
+
+</suite>

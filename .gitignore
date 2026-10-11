@@ -1,0 +1,18 @@
+# Java and Maven
+target/
+*.class
+
+# TestNG reports
+test-output/
+
+# Node dependencies
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Operating system files
+Thumbs.db
+.DS_Store

@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang='en'><head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>ParaBank QA Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:30px;font-family:Arial,sans-serif;color:#fff;background:linear-gradient(135deg,#101827,#34243d)}
+.container{max-width:1100px;margin:auto}
+h1{color:#F48031}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.glass{padding:22px;margin:20px 0;border-radius:18px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(14px);box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.number{font-size:32px;font-weight:bold;margin-top:10px}
+.label{color:#ccd2df}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:13px;border-bottom:1px solid #ffffff22}
+th{color:#F48031}
+.PASSED{color:#86efac}.FAILED{color:#fca5a5}.SKIPPED{color:#fcd34d}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:600px}
+@media(max-width:650px){body{padding:12px}.grid{grid-template-columns:1fr}}
+</style></head><body><div class='container'>
+<h1>ParaBank QA Dashboard</h1>
+<p>Generated from actual TestNG results</p>
+<div class='grid'>
+<div class='glass'><div class='label'>Passed</div><div class='number'>4</div></div>
+<div class='glass'><div class='label'>Failed</div><div class='number'>0</div></div>
+<div class='glass'><div class='label'>Skipped</div><div class='number'>0</div></div>
+</div>
+<div class='glass'><h2>Test Execution Details</h2>
+<p>Generated: 2026-10-11 10:33:00</p>
+<table><thead><tr><th>Test</th><th>Class</th><th>Status</th><th>Details</th></tr></thead><tbody>
+<tr><td>verifyParaBankHomePageLoads</td><td>com.immverse.qa.tests.SmokeTest</td><td class='PASSED'>PASSED</td><td><pre></pre></td></tr><tr><td>verifyCheckingAccountCanBeOpened</td><td>com.immverse.qa.tests.OpenAccountTest</td><td class='PASSED'>PASSED</td><td><pre></pre></td></tr><tr><td>verifyUserCanRegisterSuccessfully</td><td>com.immverse.qa.tests.RegistrationTest</td><td class='PASSED'>PASSED</td><td><pre></pre></td></tr><tr><td>verifyThreeTransfersTotal</td><td>com.immverse.qa.tests.TransferFundsTest</td><td class='PASSED'>PASSED</td><td><pre></pre></td></tr>
+</tbody></table></div>
+<p class='label'>ParaBank QA Automation · Custom TestNG HTML Report</p>
+</div></body></html>
