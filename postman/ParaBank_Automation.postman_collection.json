@@ -1,0 +1,315 @@
+{
+  "info": {
+    "_postman_id": "ced87f00-642a-4780-a3d2-b006fc611664",
+    "name": "ParaBank Automation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58035412",
+    "_collection_link": "https://go.postman.co/collection/58035412-ced87f00-642a-4780-a3d2-b006fc611664?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Scenario C - API Validation",
+      "item": [
+        {
+          "name": "00 - Open Registration Page",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "01 - Register User",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const username = \"qa_api_\" + Date.now();\r",
+                  "const ssn = String(Date.now()).slice(-9);\r",
+                  "\r",
+                  "pm.environment.set(\"username\", username);\r",
+                  "pm.environment.set(\"ssn\", ssn);\r",
+                  "\r",
+                  "console.log(\"Generated username: \" + username);\r",
+                  "console.log(\"Generated SSN: \" + ssn);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "customer.firstName",
+                  "value": "API",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.lastName",
+                  "value": "Tester",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.address.street",
+                  "value": "100 Test Street",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.address.city",
+                  "value": "Test City",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.address.state",
+                  "value": "MH",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.address.zipCode",
+                  "value": "442401",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.phoneNumber",
+                  "value": "9876543210",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.ssn",
+                  "value": "{{ssn}}",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.username",
+                  "value": "{{username}}",
+                  "type": "text"
+                },
+                {
+                  "key": "customer.password",
+                  "value": "TestPass123!",
+                  "type": "text"
+                },
+                {
+                  "key": "repeatedPassword",
+                  "value": "TestPass123!",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.htm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.htm"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "02 - Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Login returns customer details\", function () {\r\n    pm.response.to.have.status(200);\r\n\r\n    const customer = pm.response.json();\r\n\r\n    pm.expect(customer.id).to.be.a(\"number\");\r\n    pm.expect(customer.firstName).to.eql(\"API\");\r\n    pm.expect(customer.lastName).to.eql(\"Tester\");\r\n\r\n    pm.environment.set(\"customerId\", customer.id);\r\n\r\n    console.log(\"Customer ID: \" + customer.id);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/bank/login/{{username}}/TestPass123!",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "login",
+                "{{username}}",
+                "TestPass123!"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "03 - Get Customer Accounts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Customer accounts retrieved successfully\", function () {\r\n    pm.response.to.have.status(200);\r\n\r\n    const accounts = pm.response.json();\r\n\r\n    pm.expect(accounts).to.be.an(\"array\");\r\n    pm.expect(accounts.length).to.be.greaterThan(0);\r\n\r\n    const account = accounts[0];\r\n\r\n    pm.expect(account.customerId).to.eql(\r\n        Number(pm.environment.get(\"customerId\"))\r\n    );\r\n\r\n    pm.environment.set(\"sourceAccountId\", account.id);\r\n\r\n    console.log(\"Source Account ID: \" + account.id);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/bank/customers/{{customerId}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "customers",
+                "{{customerId}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "04 - Create Account",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"New checking account created\", function () {\r\n    pm.response.to.have.status(200);\r\n\r\n    const account = pm.response.json();\r\n\r\n    pm.expect(account.id).to.be.a(\"number\");\r\n    pm.expect(account.customerId).to.eql(\r\n        Number(pm.environment.get(\"customerId\"))\r\n    );\r\n    pm.expect(account.type).to.eql(\"CHECKING\");\r\n\r\n    pm.environment.set(\"newAccountId\", account.id);\r\n\r\n    console.log(\"New Account ID: \" + account.id);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/bank/createAccount?customerId={{customerId}}&newAccountType=0&fromAccountId={{sourceAccountId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "createAccount"
+              ],
+              "query": [
+                {
+                  "key": "customerId",
+                  "value": "{{customerId}}"
+                },
+                {
+                  "key": "newAccountType",
+                  "value": "0"
+                },
+                {
+                  "key": "fromAccountId",
+                  "value": "{{sourceAccountId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "05 - Deposit Funds",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/bank/deposit?accountId={{newAccountId}}&amount=500",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "deposit"
+              ],
+              "query": [
+                {
+                  "key": "accountId",
+                  "value": "{{newAccountId}}"
+                },
+                {
+                  "key": "amount",
+                  "value": "500"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "06 - Get Transaction History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Transaction response has the expected fields and types\", function () {\r\n    const transactions = pm.response.json();\r\n\r\n    pm.expect(transactions).to.be.an(\"array\");\r\n    pm.expect(transactions.length).to.be.greaterThan(0);\r\n\r\n    transactions.forEach(function (transaction) {\r\n        pm.expect(transaction.id).to.be.a(\"number\");\r\n        pm.expect(transaction.accountId).to.be.a(\"number\");\r\n        pm.expect(transaction.type).to.be.a(\"string\");\r\n        pm.expect(transaction.date).to.be.a(\"number\");\r\n        pm.expect(transaction.amount).to.be.a(\"number\");\r\n        pm.expect(transaction.description).to.be.a(\"string\");\r\n    });\r\n});\r\n\r\npm.test(\"Transaction belongs to our new account\", function () {\r\n    const transactions = pm.response.json();\r\n    const expectedAccountId = Number(\r\n        pm.environment.get(\"newAccountId\")\r\n    );\r\n\r\n    transactions.forEach(function (transaction) {\r\n        pm.expect(transaction.accountId).to.eql(expectedAccountId);\r\n    });\r\n});\r\n\r\npm.test(\"The $500 deposit exists\", function () {\r\n    const transactions = pm.response.json();\r\n\r\n    const deposit = transactions.find(function (transaction) {\r\n        return transaction.description === \"Deposit via Web Service\"\r\n            && transaction.amount === 500;\r\n    });\r\n\r\n    pm.expect(deposit).to.exist;\r\n});\r\n\r\n\r\npm.test(\"Every transaction has exactly the expected fields\", function () {\r\n    const transactions = pm.response.json();\r\n\r\n    const expectedFields = [\r\n        \"id\",\r\n        \"accountId\",\r\n        \"type\",\r\n        \"date\",\r\n        \"amount\",\r\n        \"description\"\r\n    ];\r\n\r\n    transactions.forEach(function (transaction) {\r\n        pm.expect(Object.keys(transaction).sort())\r\n            .to.eql(expectedFields.slice().sort());\r\n    });\r\n});\r\n\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/services/bank/accounts/{{newAccountId}}/transactions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "services",
+                "bank",
+                "accounts",
+                "{{newAccountId}}",
+                "transactions"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
